@@ -12,13 +12,12 @@ pool:
   - Agent.OS -equals Linux
 
 steps:
-- script: echo Hello, world!
-- bash: echo $(Build.BuildNumber)
-- bash: echo $(Agent.OS)
 - bash: echo $(Build.ArtifactStagingDirectory)
-- bash: echo $(Build.SourcesDirectory)
-- bash: echo $(Build.StagingDirectory)
 - bash: echo $(System.DefaultWorkingDirectory)
-- bash: echo $(Build.Repository.Provider)
-- bash: java -version
-- bash: node -version
+- bash: ls -R $(System.DefaultWorkingDirectory)
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/*.yaml'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- bash: ls -R $(Build.ArtifactStagingDirectory)     
