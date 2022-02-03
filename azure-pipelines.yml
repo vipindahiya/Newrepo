@@ -20,4 +20,5 @@ steps:
 - bash: echo $(Build.StagingDirectory)
 - bash: echo $(System.DefaultWorkingDirectory)
 - bash: echo $(Build.Repository.Provider)
-- bash: echo $(Strategy.Name)
+- bash: java -version
+- bash: node -version
