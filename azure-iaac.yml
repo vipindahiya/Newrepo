@@ -1,0 +1,29 @@
+trigger:
+- main
+
+pool:
+  name: 'Default'
+  demands:
+  - Agent.OS -equals Linux
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+- task: DownloadSecureFile@1
+  name: publickey
+  inputs:
+    secureFile: 'azure_rsa'
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_scret) -var ssh_public_key=$(publickey.secureFilePath)'
+    backendType: 'azurerm'
+    backendServiceArm: 'azureserviceconnection'
+    ensureBackend: true
+    backendAzureRmResourceGroupName: 'terraformbackendrg'
+    backendAzureRmResourceGroupLocation: 'westeurope'
+    backendAzureRmStorageAccountName: 'storageacctvipindevopsnew'
+    backendAzureRmContainerName: 'storageacctvipindevopsnewcontainer'
+    backendAzureRmKey: 'kubernetes-dev.tfstate'
+    allowTelemetryCollection: true
